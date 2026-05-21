@@ -1,14 +1,15 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Calendar, PawPrint, FileText, Bell, Settings, ChevronLeft } from "lucide-react";
+import { LayoutDashboard, Calendar, PawPrint, FileText, Bell, Settings, ChevronLeft, MessageSquare } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/appointments", label: "Appointments", icon: Calendar },
   { href: "/admin/pets", label: "Pet Records", icon: PawPrint },
-  { href: "/admin/records", label: "Medical Records", icon: FileText },
+  { href: "/admin/communications", label: "Communications", icon: MessageSquare },
   { href: "/admin/alerts", label: "Send Alerts", icon: Bell },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

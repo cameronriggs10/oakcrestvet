@@ -175,10 +175,12 @@ export default function PortalDashboard() {
                 <h3 className="font-semibold text-sage-900 mb-3">Quick Links</h3>
                 <nav className="space-y-2">
                   {[
+                    { label: "Notifications", href: "/portal/notifications" },
+                    { label: "Messages", href: "/portal/messages" },
+                    { label: "Medication Refills", href: "/portal/refills" },
                     { label: "Pet Records", href: "/portal/records" },
                     { label: "Appointment History", href: "/portal/appointments" },
                     { label: "Billing & Payments", href: "#" },
-                    { label: "Messages", href: "#" },
                   ].map((link) => (
                     <Link key={link.label} href={link.href} className="block text-sm text-sage-600 hover:text-primary-600 hover:bg-primary-50 px-3 py-2 rounded-lg transition-colors">
                       {link.label}

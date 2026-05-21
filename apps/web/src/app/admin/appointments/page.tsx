@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { Calendar, Search, Check, X, Clock, Filter } from "lucide-react";
+import { Calendar, Search, Check, X, Clock, Filter, RefreshCw } from "lucide-react";
 
-const allAppointments = [
+const initialAppointments = [
   { id: 1, pet: "Max", owner: "John D.", type: "Annual Wellness Exam", date: "2025-05-25", time: "10:30 AM", doctor: "Dr. Tibbs", status: "Confirmed" },
   { id: 2, pet: "Luna", owner: "Sarah M.", type: "Vaccination Follow-up", date: "2025-06-10", time: "2:00 PM", doctor: "Dr. Tibbs", status: "Pending" },
   { id: 3, pet: "Cooper", owner: "Mike R.", type: "Dental Cleaning", date: "2025-05-20", time: "11:00 AM", doctor: "Dr. Tibbs", status: "Confirmed" },
@@ -23,8 +23,27 @@ const statusStyles: Record<string, string> = {
 
 export default function AdminAppointments() {
   const [filter, setFilter] = useState("All");
+  const [appts, setAppts] = useState(initialAppointments);
+  const [rescheduling, setRescheduling] = useState<number | null>(null);
+  const [newDate, setNewDate] = useState("");
+  const [newTime, setNewTime] = useState("");
 
-  const filtered = filter === "All" ? allAppointments : allAppointments.filter(a => a.status === filter);
+  const filtered = filter === "All" ? appts : appts.filter(a => a.status === filter);
+
+  const handleReschedule = (id: number) => {
+    setRescheduling(id);
+    const apt = appts.find(a => a.id === id);
+    if (apt) {
+      setNewDate(apt.date);
+      setNewTime(apt.time);
+    }
+  };
+
+  const confirmReschedule = (id: number) => {
+    if (!newDate || !newTime) return;
+    setAppts(prev => prev.map(a => a.id === id ? { ...a, date: newDate, time: newTime } : a));
+    setRescheduling(null);
+  };
 
   return (
     <>
@@ -79,8 +98,19 @@ export default function AdminAppointments() {
                   <td className="px-6 py-4">
                     <div className="flex gap-1">
                       <button className="p-1.5 text-green-600 hover:bg-green-50 rounded" title="Confirm"><Check className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => handleReschedule(apt.id)} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded" title="Reschedule"><RefreshCw className="w-3.5 h-3.5" /></button>
                       <button className="p-1.5 text-red-500 hover:bg-red-50 rounded" title="Cancel"><X className="w-3.5 h-3.5" /></button>
                     </div>
+                    {rescheduling === apt.id && (
+                      <div className="mt-2 flex gap-1">
+                        <input type="date" value={newDate} onChange={e => setNewDate(e.target.value)}
+                          className="w-28 px-2 py-1 border border-blue-200 rounded text-xs" />
+                        <input type="time" value={newTime} onChange={e => setNewTime(e.target.value)}
+                          className="w-20 px-2 py-1 border border-blue-200 rounded text-xs" />
+                        <button onClick={() => confirmReschedule(apt.id)}
+                          className="px-2 py-1 bg-blue-500 text-white rounded text-xs">Save</button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}
