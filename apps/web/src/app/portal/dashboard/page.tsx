@@ -15,13 +15,24 @@ const upcomingAppointments = [
   { 
     date: "May 25, 2025", time: "10:30 AM", 
     type: "Annual Wellness Exam", pet: "Max", 
-    status: "Confirmed", doctor: "Dr. Johnson" 
+    status: "Confirmed", doctor: "Dr. Tibbs" 
+  },
+  { 
+    date: "June 10, 2025", time: "2:00 PM", 
+    type: "Vaccination Follow-up", pet: "Luna", 
+    status: "Pending", doctor: "Dr. Tibbs" 
   },
 ];
 
 const pets = [
-  { name: "Max", species: "Golden Retriever", age: 3, nextVisit: "May 25, 2025", image: null },
-  { name: "Luna", species: "Domestic Shorthair", age: 5, nextVisit: "June 10, 2025", image: null },
+  { 
+    name: "Max", species: "Golden Retriever", age: 3, nextVisit: "May 25, 2025", image: null,
+    health: { vaccinations: "Up to date", lastCheckup: "Jan 15, 2025", heartworm: "Active", nextDue: "Annual exam due Jan 2026", status: "good" }
+  },
+  { 
+    name: "Luna", species: "Domestic Shorthair", age: 5, nextVisit: "June 10, 2025", image: null,
+    health: { vaccinations: "Rabies due soon", lastCheckup: "June 10, 2024", heartworm: "Active", nextDue: "Vaccination due Jun 2025", status: "attention" }
+  },
 ];
 
 export default function PortalDashboard() {
@@ -120,22 +131,42 @@ export default function PortalDashboard() {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              {/* Pet Health Card */}
+              {/* Pet Health Card — Per-Pet Breakdown */}
               <div className="bg-white border border-sage-100 rounded-2xl p-5">
-                <h3 className="font-semibold text-sage-900 mb-3">Pet Health Summary</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-sm">
-                    <Activity className="w-4 h-4 text-sage-400" />
-                    <span className="text-sage-600">Vaccinations up to date</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <Syringe className="w-4 h-4 text-sage-400" />
-                    <span className="text-sage-600">Last checkup: 2 months ago</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <Heart className="w-4 h-4 text-sage-400" />
-                    <span className="text-sage-600">Heartworm prevention: Active</span>
-                  </div>
+                <h3 className="font-semibold text-sage-900 mb-4">Pet Health Summary</h3>
+                <div className="space-y-4">
+                  {pets.map((pet) => (
+                    <div key={pet.name} className="border border-sage-100 rounded-xl p-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${pet.health.status === 'good' ? 'bg-green-50' : 'bg-amber-50'}`}>
+                          <PawPrint className={`w-4 h-4 ${pet.health.status === 'good' ? 'text-green-600' : 'text-amber-600'}`} />
+                        </div>
+                        <div>
+                          <span className="font-semibold text-sm text-sage-900">{pet.name}</span>
+                          <span className={`text-xs ml-2 px-2 py-0.5 rounded-full ${pet.health.status === 'good' ? 'bg-green-50 text-green-600' : 'bg-amber-50 text-amber-600'}`}>
+                            {pet.health.status === 'good' ? '✓ Good' : '⚑ Needs Attention'}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="space-y-1.5 pl-2 text-xs">
+                        <div className="flex items-center gap-2">
+                          <Syringe className="w-3 h-3 text-primary-400" />
+                          <span className="text-sage-600">Vaccinations: <strong>{pet.health.vaccinations}</strong></span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Activity className="w-3 h-3 text-primary-400" />
+                          <span className="text-sage-600">Last checkup: <strong>{pet.health.lastCheckup}</strong></span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Heart className="w-3 h-3 text-primary-400" />
+                          <span className="text-sage-600">Heartworm: <strong>{pet.health.heartworm}</strong></span>
+                        </div>
+                        <div className="text-amber-600 mt-1 font-medium">
+                          ⏰ {pet.health.nextDue}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 

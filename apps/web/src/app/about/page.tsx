@@ -93,8 +93,9 @@ export default function AboutPage() {
               <h2 className="font-display text-2xl font-bold text-sage-900 mb-6">Clinic Hours</h2>
               <div className="space-y-3">
                 {[
-                  { day: "Monday - Friday", hours: "8:00 AM - 6:00 PM" },
-                  { day: "Saturday", hours: "9:00 AM - 3:00 PM" },
+                  { day: "Monday - Friday", hours: "8:00 AM - 5:00 PM" },
+                  { day: "Saturday (Walk-in)", hours: "9:00 AM - 1:00 PM" },
+                  { day: "Every Other Saturday", hours: "9:00 AM - 1:00 PM" },
                   { day: "Sunday", hours: "Closed" },
                 ].map((item) => (
                   <div key={item.day} className="flex items-center justify-between py-2 border-b border-sage-50 last:border-0">
@@ -104,6 +105,9 @@ export default function AboutPage() {
                     </span>
                   </div>
                 ))}
+              </div>
+              <div className="mt-4 p-3 bg-amber-50 rounded-xl text-sm text-amber-800">
+                💡 Walk-in hours available Saturdays 9 AM - 1 PM. Call ahead to confirm which Saturdays we're open.
               </div>
               <div className="mt-6 pt-6 border-t border-sage-100">
                 <div className="flex items-start gap-3">
@@ -128,11 +132,11 @@ export default function AboutPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-primary-500 shrink-0" />
-                  <a href="tel:+15551234567" className="text-sage-700 hover:text-primary-600">(555) 123-4567</a>
+                  <a href="tel:+13017739909" className="text-sage-700 hover:text-primary-600">(301) 773-9909</a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-primary-500 shrink-0" />
-                  <a href="mailto:info@oakcrestvet.com" className="text-sage-700 hover:text-primary-600">info@oakcrestvet.com</a>
+                  <a href="mailto:Oakcrestvet@gmail.com" className="text-sage-700 hover:text-primary-600">Oakcrestvet@gmail.com</a>
                 </div>
               </div>
             </div>
