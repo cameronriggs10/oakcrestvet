@@ -1,0 +1,144 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User and Auth
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String?
+  name          String?
+  role          Role      @default(CLIENT)
+  pets          Pet[]
+  appointments  Appointment[]
+  createdAt     DateTime  @default(now())
+}
+
+enum Role {
+  CLIENT
+  STAFF
+  ADMIN
+}
+
+// Pet Records
+model Pet {
+  id             String    @id @default(cuid())
+  ownerId        String
+  owner          User      @relation(fields: [ownerId], references: [id])
+  name           String
+  species        String
+  breed          String?
+  age            Int?
+  weight         Float?
+  medicalHistory MedicalRecord[]
+  appointments   Appointment[]
+  imageUrl       String?
+}
+
+model MedicalRecord {
+  id          String   @id @default(cuid())
+  petId       String
+  pet         Pet      @relation(fields: [petId], references: [id])
+  date        DateTime @default(now())
+  description String
+  attachments String[] // URLs to PDFs/Images
+}
+
+// Booking and Calendar
+model Appointment {
+  id              String            @id @default(cuid())
+  clientId        String
+  client          User              @relation(fields: [clientId], references: [id])
+  petId           String
+  pet             Pet               @relation(fields: [petId], references: [id])
+  serviceId       String
+  service         Service           @relation(fields: [serviceId], references: [id])
+  startTime       DateTime
+  endTime         DateTime
+  status          AppointmentStatus @default(PENDING)
+  provider        CalendarProvider?
+  externalEventId String?           // ID from Google/Outlook/Calendly
+  paymentId       String?           @unique
+  payment         Payment?          @relation(fields: [paymentId], references: [id])
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum CalendarProvider {
+  GOOGLE
+  OUTLOOK
+  CALENDLY
+}
+
+model Service {
+  id          String        @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  duration    Int           // In minutes
+  appointments Appointment[]
+}
+
+// Content and AI
+model BlogPost {
+  id              String   @id @default(cuid())
+  title           String
+  content         String
+  authorId        String
+  publishedAt     DateTime @default(now())
+  isAiGenerated   Boolean  @default(false)
+  category        String?
+}
+
+model Alert {
+  id          String   @id @default(cuid())
+  message     String
+  isActive    Boolean  @default(true)
+  expiresAt   DateTime?
+}
+
+model FAQ {
+  id          String   @id @default(cuid())
+  question    String
+  answer      String
+  category    String?
+}
+
+// Payments
+model Payment {
+  id            String        @id @default(cuid())
+  amount        Float
+  currency      String        @default("USD")
+  status        PaymentStatus
+  provider      String        // "STRIPE" or "SQUARE"
+  transactionId String        @unique
+  appointment   Appointment?
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+// Intake Paperwork
+model IntakeForm {
+  id          String   @id @default(cuid())
+  data        Json     // Form responses
+  emailSent   Boolean  @default(false)
+  submittedAt DateTime @default(now())
+}

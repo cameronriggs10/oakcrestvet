@@ -1,0 +1,10 @@
+{
+  "name": "@oakcrest/api-client",
+  "version": "1.0.0",
+  "description": "Shared API client and types for Oak Crest Veterinary Services",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "dependencies": {
+    "@oakcrest/db": "*"
+  }
+}

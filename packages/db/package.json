@@ -1,0 +1,21 @@
+{
+  "name": "@oakcrest/db",
+  "version": "1.0.0",
+  "description": "Shared Prisma client for Oak Crest Veterinary Services",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "scripts": {
+    "generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@prisma/client": "latest"
+  },
+  "devDependencies": {
+    "prisma": "latest",
+    "typescript": "latest",
+    "@types/node": "latest",
+    "ts-node": "latest"
+  }
+}
