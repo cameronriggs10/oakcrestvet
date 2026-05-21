@@ -1,0 +1,28 @@
+Medical Record - Oak Crest Veterinary Services
+==============================================
+Patient: Luna (Domestic Shorthair)
+Date: June 10, 2024
+Type: Annual Wellness Exam
+Doctor: Dr. Jim Tibbs
+
+EXAM SUMMARY:
+- Annual wellness examination performed
+- All vital signs normal
+- Heart rate: 150 bpm
+- Temperature: 100.8°F
+- Weight: 9 lbs
+- Body condition score: 5/9
+
+VACCINATIONS ADMINISTERED:
+- Rabies (1-year) - Due: June 2025
+- FVRCP - Due: June 2025
+
+RECOMMENDATIONS:
+- Rabies vaccination due June 2025
+- FVRCP booster due June 2025
+- Continue monthly flea prevention
+- Maintain current diet
+- Next wellness exam: June 2025
+
+NOTES:
+Patient is healthy. Due for follow-up vaccinations soon.

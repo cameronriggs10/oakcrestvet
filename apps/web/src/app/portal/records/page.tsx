@@ -17,20 +17,20 @@ const records: Record[] = [
   {
     id: 1, date: "2025-01-15", type: "Annual Wellness Exam",
     description: "Comprehensive wellness exam. All vitals normal. Vaccinations updated.",
-    doctor: "Dr. Sarah Johnson", pet: "Max",
-    files: ["Exam_Summary_Max_Jan2025.pdf"],
+    doctor: "Dr. Jim Tibbs", pet: "Max",
+    files: ["Exam_Summary_Max_Jan2025.txt"],
   },
   {
     id: 2, date: "2025-03-15", type: "Dental Cleaning",
     description: "Professional dental cleaning performed. Grade 1 tartar removed. No extractions needed.",
-    doctor: "Dr. Michael Chen", pet: "Max",
-    files: ["Dental_Report_Max_Mar2025.pdf"],
+    doctor: "Dr. Jim Tibbs", pet: "Max",
+    files: ["Dental_Report_Max_Mar2025.txt"],
   },
   {
     id: 3, date: "2024-06-10", type: "Wellness Exam",
     description: "Annual wellness exam. Vaccinations updated. Healthy weight maintained.",
-    doctor: "Dr. Emily Rodriguez", pet: "Luna",
-    files: ["Exam_Summary_Luna_Jun2024.pdf"],
+    doctor: "Dr. Jim Tibbs", pet: "Luna",
+    files: ["Exam_Summary_Luna_Jun2024.txt"],
   },
 ];
 
@@ -94,13 +94,23 @@ export default function PortalRecordsPage() {
                     </div>
                   </div>
                   <div className="flex gap-2 shrink-0">
-                    <button className="p-2 text-sage-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors" title="View">
-                      <Eye className="w-4 h-4" />
-                    </button>
                     {record.files.map((file) => (
-                      <button key={file} className="p-2 text-sage-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors" title={`Download ${file}`}>
-                        <Download className="w-4 h-4" />
-                      </button>
+                      <div key={file} className="flex gap-1">
+                        <a
+                          href={`/records/${file}`}
+                          target="_blank"
+                          className="p-2 text-sage-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors inline-flex" title={`View ${file}`}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </a>
+                        <a
+                          href={`/records/${file}`}
+                          download
+                          className="p-2 text-sage-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors inline-flex" title={`Download ${file}`}
+                        >
+                          <Download className="w-4 h-4" />
+                        </a>
+                      </div>
                     ))}
                   </div>
                 </div>

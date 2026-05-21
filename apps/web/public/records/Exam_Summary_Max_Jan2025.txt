@@ -1,0 +1,28 @@
+Medical Record - Oak Crest Veterinary Services
+==============================================
+Patient: Max (Golden Retriever)
+Date: January 15, 2025
+Type: Annual Wellness Exam
+Doctor: Dr. Jim Tibbs
+
+EXAM SUMMARY:
+- Comprehensive wellness examination performed
+- All vital signs normal
+- Heart rate: 72 bpm
+- Temperature: 101.2°F
+- Weight: 72 lbs
+- Body condition score: 5/9
+
+VACCINATIONS ADMINISTERED:
+- Rabies (1-year) - Due: Jan 2026
+- DHPP - Due: Jan 2026
+- Bordetella - Due: Sep 2025
+
+RECOMMENDATIONS:
+- Continue heartworm prevention (monthly)
+- Maintain current diet
+- Follow-up dental cleaning recommended in 6 months
+- Next wellness exam: January 2026
+
+NOTES:
+Patient is in excellent overall health. No concerns noted.

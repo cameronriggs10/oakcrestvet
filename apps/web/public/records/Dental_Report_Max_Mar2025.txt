@@ -1,0 +1,23 @@
+Medical Record - Oak Crest Veterinary Services
+==============================================
+Patient: Max (Golden Retriever)
+Date: March 15, 2025
+Type: Dental Cleaning
+Doctor: Dr. Jim Tibbs
+
+DENTAL REPORT:
+- Professional dental cleaning performed
+- Grade 1 tartar buildup - successfully removed
+- No extractions needed
+- Teeth polished
+- Oral exam completed
+
+FINDINGS:
+- Mild gingivitis noted on upper molars
+- Recommended dental home care routine
+
+RECOMMENDATIONS:
+- Brush teeth 2-3 times per week
+- Dental chews approved
+- Schedule follow-up cleaning in 12 months
+- Monitor for signs of dental discomfort
