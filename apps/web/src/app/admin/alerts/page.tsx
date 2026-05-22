@@ -1,10 +1,13 @@
 "use client";
 import { useState } from "react";
-import { Bell, Send, Mail, MessageSquare, Smartphone, Check } from "lucide-react";
+import { Bell, Send, Mail, MessageSquare, Smartphone, Check, Globe, FileText } from "lucide-react";
 
 export default function AdminAlerts() {
   const [sent, setSent] = useState(false);
-  const [form, setForm] = useState({ title: "", message: "", channels: ["email"], audience: "all" });
+  const [form, setForm] = useState({ 
+    title: "", message: "", channels: ["email"] as string[], 
+    audience: "all", createBanner: false, createBlog: false 
+  });
 
   const handleSend = () => {
     setSent(true);
@@ -21,16 +24,16 @@ export default function AdminAlerts() {
   };
 
   const recentAlerts = [
-    { title: "20% off Dental Cleaning", sent: "May 18, 2025", audience: "All Clients", channels: ["Email", "SMS"], opens: 342 },
-    { title: "Heartworm Prevention Month", sent: "May 1, 2025", audience: "Dog Owners", channels: ["Email"], opens: 521 },
-    { title: "Summer Heat Safety Tips", sent: "Apr 25, 2025", audience: "All Clients", channels: ["Email", "Push"], opens: 678 },
+    { title: "20% off Dental Cleaning", sent: "May 18, 2025", audience: "All Clients", channels: ["Email", "SMS"], opens: 342, banner: true, blog: false },
+    { title: "Heartworm Prevention Month", sent: "May 1, 2025", audience: "Dog Owners", channels: ["Email"], opens: 521, banner: false, blog: true },
+    { title: "Summer Heat Safety Tips", sent: "Apr 25, 2025", audience: "All Clients", channels: ["Email", "Push"], opens: 678, banner: false, blog: true },
   ];
 
   return (
     <>
       <div className="bg-white border-b border-sage-200 px-8 py-6">
         <h1 className="font-display text-2xl font-bold text-sage-900">Send Alerts</h1>
-        <p className="text-sm text-sage-500 mt-1">Push sales, specials, and important info to your clients</p>
+        <p className="text-sm text-sage-500 mt-1">Push sales, specials, and important info to clients + website</p>
       </div>
 
       <div className="p-8 space-y-8">
@@ -45,7 +48,7 @@ export default function AdminAlerts() {
               <label className="block text-sm font-medium text-sage-700 mb-1">Alert Title</label>
               <input value={form.title} onChange={e => setForm({...form, title: e.target.value})}
                 placeholder="e.g., Summer Special: 20% Off Dental Cleaning"
-                className="w-full px-4 py-2.5 border border-sage-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-4 py-2.5 border border-sage-200 rounded-xl text-sm"
               />
             </div>
 
@@ -53,8 +56,7 @@ export default function AdminAlerts() {
               <label className="block text-sm font-medium text-sage-700 mb-1">Message</label>
               <textarea value={form.message} onChange={e => setForm({...form, message: e.target.value})}
                 placeholder="Write your message here..."
-                rows={4}
-                className="w-full px-4 py-2.5 border border-sage-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                rows={4} className="w-full px-4 py-2.5 border border-sage-200 rounded-xl text-sm"
               />
             </div>
 
@@ -62,16 +64,17 @@ export default function AdminAlerts() {
               <div>
                 <label className="block text-sm font-medium text-sage-700 mb-2">Send Via</label>
                 <div className="flex flex-wrap gap-2">
-                  {["email", "sms", "push"].map((ch) => (
-                    <button key={ch} onClick={() => toggleChannel(ch)}
+                  {[
+                    { key: "email", label: "Email", icon: Mail },
+                    { key: "sms", label: "SMS Text", icon: MessageSquare },
+                    { key: "push", label: "Push Notification", icon: Smartphone },
+                  ].map((ch) => (
+                    <button key={ch.key} onClick={() => toggleChannel(ch.key)}
                       className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm transition-colors ${
-                        form.channels.includes(ch) 
-                          ? "bg-primary-500 text-white" 
-                          : "bg-sage-100 text-sage-600 hover:bg-sage-200"
+                        form.channels.includes(ch.key) ? "bg-primary-500 text-white" : "bg-sage-100 text-sage-600 hover:bg-sage-200"
                       }`}
                     >
-                      {ch === "email" ? <Mail className="w-3.5 h-3.5" /> : ch === "sms" ? <MessageSquare className="w-3.5 h-3.5" /> : <Smartphone className="w-3.5 h-3.5" />}
-                      {ch === "email" ? "Email" : ch === "sms" ? "SMS Text" : "Push Notification"}
+                      <ch.icon className="w-3.5 h-3.5" /> {ch.label}
                     </button>
                   ))}
                 </div>
@@ -80,7 +83,7 @@ export default function AdminAlerts() {
               <div>
                 <label className="block text-sm font-medium text-sage-700 mb-2">Audience</label>
                 <select value={form.audience} onChange={e => setForm({...form, audience: e.target.value})}
-                  className="w-full px-4 py-2.5 border border-sage-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2.5 border border-sage-200 rounded-xl text-sm"
                 >
                   <option value="all">All Clients</option>
                   <option value="dog">Dog Owners Only</option>
@@ -91,11 +94,32 @@ export default function AdminAlerts() {
               </div>
             </div>
 
+            {/* Website Options */}
+            <div className="bg-sage-50 rounded-xl p-4 space-y-3">
+              <p className="text-sm font-medium text-sage-700">Website Publishing Options</p>
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" checked={form.createBanner} onChange={e => setForm({...form, createBanner: e.target.checked})}
+                  className="mt-0.5 rounded border-sage-300 text-primary-600" />
+                <div>
+                  <p className="text-sm font-medium text-sage-900 flex items-center gap-1"><Globe className="w-3.5 h-3.5" /> Show as Website Banner</p>
+                  <p className="text-xs text-sage-500">Displays a prominent announcement banner at the top of the website</p>
+                </div>
+              </label>
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" checked={form.createBlog} onChange={e => setForm({...form, createBlog: e.target.checked})}
+                  className="mt-0.5 rounded border-sage-300 text-primary-600" />
+                <div>
+                  <p className="text-sm font-medium text-sage-900 flex items-center gap-1"><FileText className="w-3.5 h-3.5" /> Create Blog Post</p>
+                  <p className="text-xs text-sage-500">Publishes this alert as a blog post on the Pet Health page</p>
+                </div>
+              </label>
+            </div>
+
             <button onClick={handleSend}
               className="flex items-center gap-2 px-6 py-3 bg-primary-500 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors"
             >
               {sent ? <Check className="w-4 h-4" /> : <Send className="w-4 h-4" />}
-              {sent ? "Sent Successfully!" : "Send Alert"}
+              {sent ? "Published Successfully!" : "Publish Alert"}
             </button>
           </div>
         </div>
@@ -117,6 +141,8 @@ export default function AdminAlerts() {
                     {alert.channels.map(ch => (
                       <span key={ch} className="text-xs bg-sage-100 text-sage-600 px-2 py-0.5 rounded">{ch}</span>
                     ))}
+                    {alert.banner && <span className="text-xs bg-primary-50 text-primary-600 px-2 py-0.5 rounded flex items-center gap-0.5"><Globe className="w-3 h-3" /> Banner</span>}
+                    {alert.blog && <span className="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded flex items-center gap-0.5"><FileText className="w-3 h-3" /> Blog</span>}
                   </div>
                   <span className="text-xs text-sage-400">{alert.opens} opened</span>
                 </div>

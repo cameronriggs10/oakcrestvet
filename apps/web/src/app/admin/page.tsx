@@ -1,8 +1,11 @@
 "use client";
 import Link from "next/link";
-import { Calendar, PawPrint, Users, Bell, DollarSign, TrendingUp, Clock, AlertCircle, FileText } from "lucide-react";
+import { useState } from "react";
+import { Calendar, PawPrint, Users, Bell, DollarSign, TrendingUp, Clock, AlertCircle, FileText, Phone, Mail, Search, ChevronRight, Syringe, Activity } from "lucide-react";
 
 export default function AdminDashboard() {
+  const [searchDb, setSearchDb] = useState("");
+
   const stats = [
     { label: "Total Clients", value: "1,247", icon: Users, change: "+12 this month", color: "bg-blue-50 text-blue-600" },
     { label: "Active Pets", value: "1,892", icon: PawPrint, change: "+23 this month", color: "bg-green-50 text-green-600" },
@@ -118,6 +121,101 @@ export default function AdminDashboard() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Client & Pet Database */}
+      <div className="px-8 pb-8">
+        <div className="bg-white rounded-2xl border border-sage-100 overflow-hidden">
+          <div className="px-6 py-4 border-b border-sage-100 flex items-center justify-between">
+            <h2 className="font-semibold text-sage-900 flex items-center gap-2">
+              <Users className="w-4 h-4 text-primary-500" /> Client & Pet Database
+            </h2>
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-sage-400" />
+                <input value={searchDb} onChange={e => setSearchDb(e.target.value)}
+                  placeholder="Search clients, pets, phone, email..."
+                  className="pl-9 pr-3 py-1.5 border border-sage-200 rounded-lg text-xs w-64" />
+              </div>
+              <Link href="/admin/pets" className="text-xs text-primary-600 hover:underline">Manage Pets</Link>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-sage-50 text-left text-xs text-sage-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 font-medium">Owner</th>
+                  <th className="px-6 py-3 font-medium">Contact</th>
+                  <th className="px-6 py-3 font-medium">Pets</th>
+                  <th className="px-6 py-3 font-medium">Last Visit</th>
+                  <th className="px-6 py-3 font-medium">Status</th>
+                  <th className="px-6 py-3 font-medium">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-sage-50">
+                {[
+                  { owner: "John D.", email: "john@email.com", phone: "(555) 111-2222", pets: "Max (Golden Retriever)", lastVisit: "Jan 15, 2025", status: "Active", petCount: 1 },
+                  { owner: "Sarah M.", email: "sarah@email.com", phone: "(555) 222-3333", pets: "Luna (Domestic Shorthair)", lastVisit: "Jun 10, 2024", status: "Due Visit", petCount: 1 },
+                  { owner: "Mike R.", email: "mike@email.com", phone: "(555) 333-4444", pets: "Cooper (Beagle)", lastVisit: "Mar 1, 2025", status: "Active", petCount: 1 },
+                  { owner: "Emily T.", email: "emily@email.com", phone: "(555) 444-5555", pets: "Bella (Siamese)", lastVisit: "Apr 20, 2025", status: "Active", petCount: 1 },
+                  { owner: "James K.", email: "james@email.com", phone: "(555) 555-6666", pets: "Rocky (German Shepherd)", lastVisit: "Feb 10, 2025", status: "Active", petCount: 1 },
+                  { owner: "Lisa W.", email: "lisa@email.com", phone: "(555) 666-7777", pets: "Daisy (Poodle)", lastVisit: "May 1, 2025", status: "New", petCount: 1 },
+                  { owner: "Rob P.", email: "rob@email.com", phone: "(555) 777-8888", pets: "Charlie (Beagle) • Max (Lab)", lastVisit: "Mar 20, 2025", status: "Active", petCount: 2 },
+                ].filter(row => 
+                  searchDb === "" || 
+                  row.owner.toLowerCase().includes(searchDb.toLowerCase()) ||
+                  row.pets.toLowerCase().includes(searchDb.toLowerCase()) ||
+                  row.email.toLowerCase().includes(searchDb.toLowerCase()) ||
+                  row.phone.includes(searchDb)
+                ).map((row) => (
+                  <tr key={row.owner} className="hover:bg-sage-50/50">
+                    <td className="px-6 py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-primary-50 rounded-full flex items-center justify-center">
+                          <Users className="w-4 h-4 text-primary-600" />
+                        </div>
+                        <span className="font-medium text-sage-900">{row.owner}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-3">
+                      <div className="text-xs">
+                        <p className="flex items-center gap-1 text-sage-600"><Mail className="w-3 h-3" /> {row.email}</p>
+                        <p className="flex items-center gap-1 text-sage-500"><Phone className="w-3 h-3" /> {row.phone}</p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-3 text-sage-700">{row.pets}</td>
+                    <td className="px-6 py-3 text-sage-600">{row.lastVisit}</td>
+                    <td className="px-6 py-3">
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        row.status === "Active" ? "bg-green-50 text-green-600" :
+                        row.status === "New" ? "bg-blue-50 text-blue-600" :
+                        "bg-amber-50 text-amber-600"
+                      }`}>{row.status}</span>
+                    </td>
+                    <td className="px-6 py-3">
+                      <div className="flex gap-1">
+                        <Link href={`/admin/pets`} className="px-2.5 py-1 text-xs bg-primary-50 text-primary-600 rounded-lg hover:bg-primary-100">View</Link>
+                        <button className="px-2.5 py-1 text-xs bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100">Contact</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="px-6 py-3 border-t border-sage-50 text-xs text-sage-400 flex items-center justify-between">
+            <span>Showing {[
+              { owner: "John D." }, { owner: "Sarah M." }, { owner: "Mike R." }, { owner: "Emily T." },
+              { owner: "James K." }, { owner: "Lisa W." }, { owner: "Rob P." }
+            ].filter(r => searchDb === "" || r.owner.toLowerCase().includes(searchDb.toLowerCase())).length} of 7 clients</span>
+            <span className="flex items-center gap-4">
+              <span>🐾 Total Pets: 8</span>
+              <span>📅 Active: 6</span>
+              <span>⚠️ Due Visit: 1</span>
+            </span>
           </div>
         </div>
       </div>

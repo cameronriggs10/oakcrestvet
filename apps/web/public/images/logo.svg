@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" fill="none">
+  <!-- Oak Crest Veterinary Services Logo -->
+  
+  <!-- Icon: Paw print with oak leaf integration -->
+  <g transform="translate(10, 10)">
+    <!-- Main paw pad (oak leaf shape) -->
+    <path d="M50 55 C50 45 55 35 65 30 C75 25 85 25 90 30 C100 35 100 45 100 55 C100 65 90 75 75 80 C60 75 50 65 50 55Z"
+          fill="#2A9D8F"/>
+    <!-- Oak leaf vein detail on paw pad -->
+    <path d="M65 40 L75 55 L85 40 L75 50Z" fill="#1A6B5C" opacity="0.4"/>
+    <!-- Toe beans -->
+    <ellipse cx="42" cy="45" rx="10" ry="12" fill="#2A9D8F"/>
+    <ellipse cx="28" cy="60" rx="9" ry="11" fill="#E76F51"/>
+    <ellipse cx="108" cy="45" rx="10" ry="12" fill="#2A9D8F"/>
+    <ellipse cx="122" cy="60" rx="9" ry="11" fill="#E76F51"/>
+    <!-- Smaller accessory toe beans -->
+    <ellipse cx="38" cy="32" rx="6" ry="7" fill="#64D8CC"/>
+    <ellipse cx="112" cy="32" rx="6" ry="7" fill="#64D8CC"/>
+    <!-- Small heart in paw center -->
+    <path d="M72 52 C73 50 75 49 76 50 C77 49 79 50 80 52 C81 54 79 56 76 58 C73 56 71 54 72 52Z"
+          fill="#E76F51" opacity="0.7"/>
+    <!-- Small oak leaf accent -->
+    <path d="M85 65 C88 62 92 63 93 66 C94 69 91 71 88 70 C85 69 83 67 85 65Z"
+          fill="#F4A261" opacity="0.6"/>
+  </g>
+  
+  <!-- Text -->
+  <g transform="translate(150, 28)">
+    <!-- Oak Crest -->
+    <text x="0" y="32" font-family="'Playfair Display', Georgia, serif" font-size="34" font-weight="700" fill="#1A6B5C" letter-spacing="1">
+      Oak Crest
+    </text>
+    <!-- Veterinary Services -->
+    <text x="2" y="62" font-family="'Nunito', 'Arial', sans-serif" font-size="16" font-weight="600" fill="#3D3A3A" letter-spacing="1.5">
+      VETERINARY SERVICES
+    </text>
+    <!-- Tagline -->
+    <text x="2" y="80" font-family="'Nunito', 'Arial', sans-serif" font-size="10" font-weight="500" fill="#6B6A66" letter-spacing="0.5">
+      Compassionate Care for Your Furry Family Members
+    </text>
+  </g>
+</svg>

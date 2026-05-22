@@ -1,13 +1,16 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Calendar, PawPrint, FileText, Bell, Settings, ChevronLeft, MessageSquare } from "lucide-react";
+import { LayoutDashboard, Calendar, PawPrint, FileText, Bell, Settings, ChevronLeft, MessageSquare, DollarSign, ClipboardList, Users } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/clients", label: "Clients & Pets", icon: Users },
   { href: "/admin/appointments", label: "Appointments", icon: Calendar },
   { href: "/admin/pets", label: "Pet Records", icon: PawPrint },
   { href: "/admin/communications", label: "Communications", icon: MessageSquare },
+  { href: "/admin/forms", label: "Patient Forms", icon: ClipboardList },
+  { href: "/admin/invoices", label: "Invoicing", icon: DollarSign },
   { href: "/admin/alerts", label: "Send Alerts", icon: Bell },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];

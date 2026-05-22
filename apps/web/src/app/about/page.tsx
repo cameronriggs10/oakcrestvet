@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Clock, MapPin, Phone, Mail, Heart, Award, Users } from "lucide-react";
 
@@ -20,10 +21,14 @@ export default function AboutPage() {
       <section className="py-16 md:py-20">
         <div className="container-wide">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative aspect-[4/3] bg-gradient-to-br from-primary-200 to-primary-400 rounded-3xl overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Heart className="w-20 h-20 text-white/30" />
-              </div>
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden">
+              <Image
+                src="/images/about-clinic.jpg"
+                alt="Oak Crest Veterinary Clinic interior"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
             </div>
             <div className="space-y-4">
               <span className="text-primary-600 font-semibold text-sm uppercase tracking-wider">Our Story</span>

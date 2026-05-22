@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Mail, Award, GraduationCap } from "lucide-react";
 
@@ -30,6 +31,15 @@ export default function TeamPage() {
     <>
       <section className="bg-gradient-to-br from-primary-50 to-warm-50 py-16 md:py-20">
         <div className="container-wide text-center">
+          <div className="relative w-full max-w-3xl mx-auto aspect-video rounded-2xl overflow-hidden mb-8 shadow-lg">
+            <Image
+              src="/images/vet-team.png"
+              alt="Oak Crest Veterinary Team"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
           <h1 className="font-display text-4xl md:text-5xl font-bold text-sage-900 mb-4">
             Our Team
           </h1>

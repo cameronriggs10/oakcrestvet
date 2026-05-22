@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { MessageSquare, Pill, FileText, Mail, Send, CheckCircle, X, Clock, User, Search, Filter } from "lucide-react";
+import { MessageSquare, Pill, FileText, Send, CheckCircle, X, User, Search, Filter, Clock, Plus, Reply } from "lucide-react";
 
 type CommType = "all" | "message" | "refill" | "intake" | "alert";
 
@@ -24,7 +24,18 @@ const initialComms: CommItem[] = [
   { id: 5, type: "refill", from: "Emily T.", pet: "Bella", subject: "Flea Prevention Refill", message: "Need to refill Bella's flea medication - almost out", date: "May 15, 2025", status: "new", notes: "" },
 ];
 
-const typeIcons: Record<string, any> = { message: MessageSquare, refill: Pill, intake: FileText, alert: Mail };
+// Predefined response templates
+const quickReplies = [
+  { label: "Refill Approved", text: "Your refill request has been approved. The medication will be ready for pickup within 24 hours. Please call ahead to confirm availability. Thank you!" },
+  { label: "Refill - Need Exam", text: "A refill requires an updated examination. Your pet is due for a check-up before we can authorize this refill. Please schedule an appointment at your earliest convenience." },
+  { label: "Appointment Confirmed", text: "Your appointment has been confirmed. Please arrive 10 minutes early. If you need to reschedule, please notify us at least 48 hours in advance." },
+  { label: "General Health Advice", text: "Thank you for reaching out. Based on the symptoms described, we recommend scheduling an examination to properly diagnose the issue. In the meantime, monitor closely and contact us if symptoms worsen." },
+  { label: "Intake Form Received", text: "Thank you for submitting your new patient intake form! We have received your paperwork and a member of our team will contact you within 24-48 hours to schedule your first appointment. Welcome to Oak Crest!" },
+  { label: "Payment Follow-up", text: "This is a friendly reminder that you have an outstanding balance on your account. Please log into your client portal to view and pay your invoice. Thank you!" },
+  { label: "Lab Results Ready", text: "Your pet's lab results are now available. Please schedule a follow-up appointment to review the results with the doctor. You can book through the client portal or call us." },
+];
+
+const typeIcons: Record<string, any> = { message: MessageSquare, refill: Pill, intake: FileText, alert: Send };
 const typeColors: Record<string, string> = { message: "bg-blue-50 text-blue-600", refill: "bg-green-50 text-green-600", intake: "bg-primary-50 text-primary-600", alert: "bg-warm-50 text-warm-600" };
 const statusColors: Record<string, string> = { "new": "bg-amber-50 text-amber-600", "in-progress": "bg-blue-50 text-blue-600", "completed": "bg-green-50 text-green-600" };
 
@@ -36,6 +47,7 @@ export default function AdminCommunications() {
   const [response, setResponse] = useState("");
   const [notes, setNotes] = useState("");
   const [search, setSearch] = useState("");
+  const [showQuickReplies, setShowQuickReplies] = useState(false);
 
   const filtered = comms.filter(c => {
     if (filter !== "all" && c.type !== filter) return false;
@@ -44,15 +56,23 @@ export default function AdminCommunications() {
     return true;
   });
 
+  const useQuickReply = (text: string) => {
+    setResponse(text);
+    setShowQuickReplies(false);
+  };
+
   const handleRespond = (id: number) => {
     setComms(prev => prev.map(c => c.id === id ? { ...c, status: "in-progress", notes: notes || c.notes } : c));
     setResponding(null);
     setResponse("");
+    setNotes("");
   };
 
   const markComplete = (id: number) => {
     setComms(prev => prev.map(c => c.id === id ? { ...c, status: "completed", notes: notes || c.notes } : c));
     setResponding(null);
+    setResponse("");
+    setNotes("");
   };
 
   return (
@@ -140,9 +160,29 @@ export default function AdminCommunications() {
                   {/* Response Form */}
                   {isResponding && (
                     <div className="mt-4 pt-4 border-t border-sage-100 space-y-3">
+                      {/* Quick Replies */}
+                      <div className="relative">
+                        <button onClick={() => setShowQuickReplies(!showQuickReplies)}
+                          className="flex items-center gap-1.5 text-xs text-primary-600 hover:text-primary-700 mb-2">
+                          <Plus className="w-3 h-3" /> Insert Quick Reply
+                        </button>
+                        {showQuickReplies && (
+                          <div className="absolute z-10 left-0 top-8 bg-white border border-sage-200 rounded-xl shadow-lg p-2 w-80 max-h-64 overflow-y-auto">
+                            <p className="text-xs font-medium text-sage-500 px-2 py-1">Predefined Responses</p>
+                            {quickReplies.map((qr) => (
+                              <button key={qr.label} onClick={() => useQuickReply(qr.text)}
+                                className="block w-full text-left text-xs text-sage-700 hover:bg-primary-50 px-2 py-2 rounded-lg transition-colors">
+                                <span className="font-medium text-sage-900">{qr.label}</span>
+                                <p className="text-sage-500 truncate mt-0.5">{qr.text.substring(0, 60)}...</p>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
                       <textarea value={response} onChange={e => setResponse(e.target.value)}
                         placeholder="Type your response..."
-                        className="w-full px-4 py-2.5 border border-sage-200 rounded-xl text-sm" rows={2}
+                        className="w-full px-4 py-2.5 border border-sage-200 rounded-xl text-sm" rows={3}
                       />
                       <div className="flex gap-2">
                         <input value={notes} onChange={e => setNotes(e.target.value)}

@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/Button";
 import { Calendar, Clock, Check, ChevronLeft, ChevronRight } from "lucide-react";
 
 const services = [
-  { id: "wellness", name: "Wellness Exam", duration: "30 min", price: "$65" },
-  { id: "vaccination", name: "Vaccination Visit", duration: "15 min", price: "$25 - $45" },
-  { id: "dental", name: "Dental Cleaning", duration: "60 min", price: "From $200" },
-  { id: "sick", name: "Sick Visit", duration: "30 min", price: "$85" },
-  { id: "surgery", name: "Surgery Consultation", duration: "45 min", price: "Varies" },
-  { id: "followup", name: "Follow-up Visit", duration: "15 min", price: "$45" },
+  { id: "wellness", name: "Wellness Exam", duration: "30 min", price: "$65", slots: ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM"] },
+  { id: "vaccination", name: "Vaccination Visit", duration: "15 min", price: "$25 - $45", slots: ["9:00 AM", "9:15 AM", "9:30 AM", "9:45 AM", "10:00 AM", "10:15 AM", "10:30 AM", "11:00 AM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM"] },
+  { id: "dental", name: "Dental Cleaning", duration: "60 min", price: "From $200", slots: ["9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "2:00 PM", "3:00 PM"] },
+  { id: "sick", name: "Sick Visit", duration: "30 min", price: "$85", slots: ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM"] },
+  { id: "surgery", name: "Surgery Consultation", duration: "45 min", price: "Varies", slots: ["9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "2:00 PM"] },
+  { id: "followup", name: "Follow-up Visit", duration: "15 min", price: "$45", slots: ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM"] },
 ];
 
 const timeSlots = [
@@ -162,11 +162,14 @@ export default function BookingPage() {
                 <div>
                   <h3 className="font-semibold text-sage-900 mb-4">Select Time</h3>
                   <div className="bg-white border border-sage-100 rounded-2xl p-4">
-                    <div className="grid grid-cols-2 gap-2">
-                      {timeSlots.map((time) => (
-                        <button
-                          key={time}
-                          onClick={() => setSelectedTime(time)}
+                    {selectedService ? (
+                      <>
+                        <p className="text-xs text-sage-500 mb-3">Available times for <strong>{services.find(s => s.id === selectedService)?.name}</strong></p>
+                        <div className="grid grid-cols-2 gap-2">
+                          {(services.find(s => s.id === selectedService)?.slots || timeSlots).map((time) => (
+                            <button
+                              key={time}
+                              onClick={() => setSelectedTime(time)}
                           className={`py-2.5 px-3 text-sm rounded-xl border transition-all ${
                             selectedTime === time
                               ? "border-primary-500 bg-primary-50 text-primary-700 font-medium"
@@ -177,6 +180,10 @@ export default function BookingPage() {
                         </button>
                       ))}
                     </div>
+                    </>
+                  ) : (
+                    <p className="text-sm text-sage-400 text-center py-4">Please select a service first</p>
+                  )}
                   </div>
                 </div>
               </div>

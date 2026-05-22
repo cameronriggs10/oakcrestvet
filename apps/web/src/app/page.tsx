@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { PawPrint, Heart, Shield, Stethoscope, Syringe, Scissors, Star, Calendar, UserPlus, FileText, Clock, ArrowRight } from "lucide-react";
 
@@ -109,19 +110,17 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Image Placeholder */}
+            {/* Right Image - Hero Banner */}
             <div className="flex-1 w-full max-w-lg">
-              <div className="relative aspect-square bg-gradient-to-br from-primary-200 to-primary-400 rounded-3xl overflow-hidden shadow-2xl">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <PawPrint className="w-24 h-24 mx-auto mb-4 opacity-60" />
-                    <p className="text-lg font-medium opacity-80">Your Pet&apos;s</p>
-                    <p className="text-2xl font-display font-bold">Second Home</p>
-                  </div>
-                </div>
-                {/* Decorative dots */}
-                <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-accent-400/20 rounded-full blur-xl" />
-                <div className="absolute -top-4 -left-4 w-24 h-24 bg-warm-400/30 rounded-full blur-xl" />
+              <div className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl">
+                <Image
+                  src="/images/hero-banner.png"
+                  alt="Oak Crest Veterinary Services - Compassionate pet care"
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
             </div>
           </div>
