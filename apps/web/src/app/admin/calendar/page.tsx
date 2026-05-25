@@ -74,22 +74,21 @@ function createDefaultWeekSchedule(): Record<DayOfWeek, DaySchedule> {
   return schedule;
 }
 
-const [weekOffset, setWeekOffset] = useState(0);
-
-const getWeekDates = () => {
-  const today = new Date();
-  const startOfWeek = new Date(today);
-  startOfWeek.setDate(today.getDate() + weekOffset * 7 - today.getDay() + 1);
-  return daysOfWeek.map((_, i) => {
-    const d = new Date(startOfWeek);
-    d.setDate(startOfWeek.getDate() + i);
-    return d;
-  });
-};
-
 export default function AdminCalendar() {
   const [selectedVet, setSelectedVet] = useState(vets[0]);
   const [view, setView] = useState<"week" | "schedule">("schedule");
+  const [weekOffset, setWeekOffset] = useState(0);
+
+  const getWeekDates = () => {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() + weekOffset * 7 - today.getDay() + 1);
+    return daysOfWeek.map((_, i) => {
+      const d = new Date(startOfWeek);
+      d.setDate(startOfWeek.getDate() + i);
+      return d;
+    });
+  };
 
   const [schedules, setSchedules] = useState<VetSchedule[]>(
     vets.map(v => ({
