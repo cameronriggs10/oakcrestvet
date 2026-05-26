@@ -1,6 +1,9 @@
 "use client";
 import { useState } from "react";
-import { PawPrint, Search, Syringe, Calendar, ChevronRight, FileText, Upload, X, Download, Heart, Activity, Pill, User, Clock } from "lucide-react";
+import { PawPrint, Search, Syringe, Calendar, ChevronRight, FileText, Upload, X, Download, Heart, Activity, Pill, User, Clock, Edit3, Save, Plus } from "lucide-react";
+
+const dogVaccines = ["Rabies", "DHPP", "Bordetella", "Leptospirosis", "Lyme", "Canine Influenza", "Corona"];
+const catVaccines = ["Rabies", "FVRCP", "FeLV", "FIV", "Chlamydia", "FIP"];
 
 const petsData = [
   { name: "Max", species: "Dog", breed: "Golden Retriever", age: 3, owner: "John D.", ownerEmail: "john@email.com", phone: "(555) 111-2222", lastVisit: "2025-01-15", records: 2, color: "Golden", weight: "72 lbs", microchip: "985112345678901", vaccinations: [{ name: "Rabies", date: "Jan 2025", due: "Jan 2026" }, { name: "DHPP", date: "Jan 2025", due: "Jan 2026" }, { name: "Bordetella", date: "Mar 2025", due: "Sep 2025" }] },
@@ -16,17 +19,19 @@ const uploadedFiles: string[] = [];
 export default function AdminPets() {
   const [search, setSearch] = useState("");
   const [selectedPet, setSelectedPet] = useState<string | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const [petList, setPetList] = useState(petsData);
   const [dragOver, setDragOver] = useState(false);
   const [files, setFiles] = useState<string[]>([]);
   const [note, setNote] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
-  const filtered = petsData.filter(p => 
+  const filtered = petList.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
     p.owner.toLowerCase().includes(search.toLowerCase())
   );
 
-  const pet = petsData.find(p => p.name === selectedPet);
+  const pet = petList.find(p => p.name === selectedPet);
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -63,6 +68,10 @@ export default function AdminPets() {
               <h1 className="font-display text-2xl font-bold text-sage-900">{pet.name}</h1>
               <p className="text-sm text-sage-500">{pet.breed} • {pet.age} years • {pet.species}</p>
             </div>
+            <button onClick={() => setEditMode(!editMode)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-primary-50 text-primary-600 rounded-lg hover:bg-primary-100">
+              <Edit3 className="w-3.5 h-3.5" /> {editMode ? "Done Editing" : "Edit Pet"}
+            </button>
           </div>
         </div>
 
@@ -88,10 +97,51 @@ export default function AdminPets() {
 
           {/* Vaccinations */}
           <div className="bg-white rounded-2xl border border-sage-100 p-5">
-            <h2 className="font-semibold text-sage-900 mb-3 flex items-center gap-2"><Syringe className="w-4 h-4 text-primary-500" /> Vaccinations</h2>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-semibold text-sage-900 flex items-center gap-2"><Syringe className="w-4 h-4 text-primary-500" /> Vaccinations</h2>
+              {editMode && (
+                <button onClick={() => {
+                  const updated = [...petList];
+                  const idx = updated.findIndex(p => p.name === pet.name);
+                  if (idx >= 0) {
+                    updated[idx] = { ...updated[idx], vaccinations: [...updated[idx].vaccinations, { name: "", date: "", due: "" }] };
+                    setPetList(updated);
+                  }
+                }} className="flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700">
+                  <Plus className="w-3 h-3" /> Add Vaccine
+                </button>
+              )}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {pet.vaccinations.map((v) => (
-                <div key={v.name} className="flex items-center justify-between bg-sage-50 rounded-xl px-4 py-2.5">
+              {pet.vaccinations.map((v, idx) => (
+                <div key={idx} className="flex items-center justify-between bg-sage-50 rounded-xl px-4 py-2.5">
+                  {editMode ? (
+                    <div className="flex-1 grid grid-cols-3 gap-1">
+                      <select value={v.name} onChange={e => {
+                        const updated = [...petList];
+                        const pIdx = updated.findIndex(p => p.name === pet.name);
+                        updated[pIdx].vaccinations[idx] = { ...updated[pIdx].vaccinations[idx], name: e.target.value };
+                        setPetList(updated);
+                      }} className="px-2 py-1 border border-sage-200 rounded text-xs">
+                        <option value="">Select...</option>
+                        {(pet.species === "Dog" ? dogVaccines : catVaccines).map(vax => (
+                          <option key={vax}>{vax}</option>
+                        ))}
+                      </select>
+                      <input type="text" value={v.date} onChange={e => {
+                        const updated = [...petList];
+                        const pIdx = updated.findIndex(p => p.name === pet.name);
+                        updated[pIdx].vaccinations[idx] = { ...updated[pIdx].vaccinations[idx], date: e.target.value };
+                        setPetList(updated);
+                      }} className="px-2 py-1 border border-sage-200 rounded text-xs" placeholder="Given" />
+                      <input type="text" value={v.due} onChange={e => {
+                        const updated = [...petList];
+                        const pIdx = updated.findIndex(p => p.name === pet.name);
+                        updated[pIdx].vaccinations[idx] = { ...updated[pIdx].vaccinations[idx], due: e.target.value };
+                        setPetList(updated);
+                      }} className="px-2 py-1 border border-sage-200 rounded text-xs" placeholder="Due" />
+                    </div>
+                  ) : (<>
                   <div>
                     <p className="text-sm font-medium text-sage-900">{v.name}</p>
                     <p className="text-xs text-sage-500">Given: {v.date}</p>
@@ -99,8 +149,9 @@ export default function AdminPets() {
                   <span className={`text-xs px-2.5 py-1 rounded-full ${new Date(v.due) < new Date() ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
                     {new Date(v.due) < new Date() ? 'OVERDUE' : `Due ${v.due}`}
                   </span>
+                  </>
+                  )}
                 </div>
-              ))}
             </div>
           </div>
 

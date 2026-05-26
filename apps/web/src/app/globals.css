@@ -1,50 +1,58 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #f0f7f4;
-  --color-primary-100: #dcefe3;
-  --color-primary-200: #bae0c8;
-  --color-primary-300: #8ecaa7;
-  --color-primary-400: #5faf82;
-  --color-primary-500: #3d9368;
-  --color-primary-600: #2d7753;
-  --color-primary-700: #265f44;
-  --color-primary-800: #214c38;
-  --color-primary-900: #1c3f2f;
-  --color-primary-950: #0e231a;
-  --color-accent-50: #fef6f0;
-  --color-accent-100: #fdeada;
-  --color-accent-200: #fad1b3;
-  --color-accent-300: #f6b183;
-  --color-accent-400: #f18852;
-  --color-accent-500: #ee6b2e;
-  --color-accent-600: #df5323;
-  --color-accent-700: #b93f1e;
-  --color-accent-800: #933420;
-  --color-accent-900: #772e1d;
-  --color-accent-950: #40150d;
-  --color-warm-50: #fefcfb;
-  --color-warm-100: #fef7f2;
-  --color-warm-200: #fdedd9;
-  --color-warm-300: #fbdcb5;
-  --color-warm-400: #f8c287;
-  --color-warm-500: #f4a35a;
-  --color-warm-600: #f08a3a;
-  --color-warm-700: #e07228;
-  --color-warm-800: #b95b22;
-  --color-warm-900: #944b1f;
-  --color-warm-950: #4e250e;
-  --color-sage-50: #f6f7f4;
-  --color-sage-100: #e3e7dd;
-  --color-sage-200: #c7cfbb;
-  --color-sage-300: #a5b291;
-  --color-sage-400: #86996c;
-  --color-sage-500: #6b7d53;
-  --color-sage-600: #546340;
-  --color-sage-700: #434f34;
-  --color-sage-800: #38412c;
-  --color-sage-900: #303727;
-  --color-sage-950: #181d12;
+  /* Primary: Warm Terracotta - Trustworthy, Compassionate, Inviting */
+  --color-primary-50: #fdf4f0;
+  --color-primary-100: #fae6dc;
+  --color-primary-200: #f5ccb9;
+  --color-primary-300: #eeab90;
+  --color-primary-400: #e68767;
+  --color-primary-500: #d48166;
+  --color-primary-600: #bf6b50;
+  --color-primary-700: #a05742;
+  --color-primary-800: #844936;
+  --color-primary-900: #6d3e2f;
+  --color-primary-950: #3b1f16;
+
+  /* Accent: Soft Amber/Gold - Warmth & Optimism */
+  --color-accent-50: #fef9f0;
+  --color-accent-100: #fdf0d9;
+  --color-accent-200: #fbdeb1;
+  --color-accent-300: #f8c784;
+  --color-accent-400: #f4aa58;
+  --color-accent-500: #e8923e;
+  --color-accent-600: #d47a2e;
+  --color-accent-700: #b06227;
+  --color-accent-800: #8e4f24;
+  --color-accent-900: #754221;
+  --color-accent-950: #401f0d;
+
+  /* Warm: Soft Peach/Cream - Gentle & Nurturing */
+  --color-warm-50: #fff8f2;
+  --color-warm-100: #ffefe0;
+  --color-warm-200: #fedcbe;
+  --color-warm-300: #fdc496;
+  --color-warm-400: #fba56a;
+  --color-warm-500: #f58a48;
+  --color-warm-600: #e47135;
+  --color-warm-700: #bf5b2c;
+  --color-warm-800: #984a29;
+  --color-warm-900: #7b3f25;
+  --color-warm-950: #421e10;
+
+  /* Sage: Warm Earthy Neutrals - Grounding & Stable */
+  --color-sage-50: #faf8f5;
+  --color-sage-100: #f2ede5;
+  --color-sage-200: #e4d9cb;
+  --color-sage-300: #d1c1ab;
+  --color-sage-400: #bba58b;
+  --color-sage-500: #a89072;
+  --color-sage-600: #907a5f;
+  --color-sage-700: #77644e;
+  --color-sage-800: #625243;
+  --color-sage-900: #514439;
+  --color-sage-950: #2b231d;
+
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-display: 'Playfair Display', Georgia, serif;
 }
