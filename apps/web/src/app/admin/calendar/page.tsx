@@ -75,9 +75,11 @@ function createDefaultWeekSchedule(): Record<DayOfWeek, DaySchedule> {
 }
 
 export default function AdminCalendar() {
-  const [selectedVet, setSelectedVet] = useState(vets[0]);
-  const [view, setView] = useState<"week" | "schedule">("schedule");
+  const [selectedVet, setSelectedVet] = useState<string>("all");
+  const [view, setView] = useState<"week" | "schedule" | "day">("schedule");
   const [weekOffset, setWeekOffset] = useState(0);
+  const [selectedDay, setSelectedDay] = useState<DayOfWeek>("monday");
+  const [excludeWeekends, setExcludeWeekends] = useState(false);
 
   const getWeekDates = () => {
     const today = new Date();
@@ -212,25 +214,47 @@ export default function AdminCalendar() {
 
       <div className="p-8 space-y-6">
         {/* Vet Selector */}
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Users className="w-4 h-4 text-sage-400" />
-            <span className="text-sm text-sage-600">Veterinarian:</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1">
+              <Users className="w-4 h-4 text-sage-400" />
+              <span className="text-sm text-sage-600">Vet:</span>
+            </div>
+            <button onClick={() => setSelectedVet("all")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                selectedVet === "all" ? "bg-primary-500 text-white" : "bg-white border border-sage-200 text-sage-700 hover:bg-sage-50"
+              }`}>All Vets</button>
+            {vets.map(v => (
+              <button key={v} onClick={() => setSelectedVet(v)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  selectedVet === v ? "bg-primary-500 text-white" : "bg-white border border-sage-200 text-sage-700 hover:bg-sage-50"
+                }`}>{v}</button>
+            ))}
+            <div className="ml-auto flex items-center gap-2">
+              <label className="flex items-center gap-1.5 text-xs text-sage-500 cursor-pointer">
+                <input type="checkbox" checked={excludeWeekends} onChange={e => setExcludeWeekends(e.target.checked)} className="rounded" />
+                Hide Weekends
+              </label>
+              <div className="flex gap-0.5 border border-sage-200 rounded-lg overflow-hidden">
+                <button onClick={() => setView("schedule")}
+                  className={`px-2.5 py-1.5 text-[10px] font-medium ${view === "schedule" ? "bg-primary-50 text-primary-600" : "text-sage-500 hover:bg-sage-50"}`}>Weekly</button>
+                <button onClick={() => setView("day")}
+                  className={`px-2.5 py-1.5 text-[10px] font-medium ${view === "day" ? "bg-primary-50 text-primary-600" : "text-sage-500 hover:bg-sage-50"}`}>Daily</button>
+                <button onClick={() => setView("week")}
+                  className={`px-2.5 py-1.5 text-[10px] font-medium ${view === "week" ? "bg-primary-50 text-primary-600" : "text-sage-500 hover:bg-sage-50"}`}>Calendar</button>
+              </div>
+            </div>
           </div>
-          {vets.map(v => (
-            <button key={v} onClick={() => setSelectedVet(v)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                selectedVet === v ? "bg-primary-500 text-white" : "bg-white border border-sage-200 text-sage-700 hover:bg-sage-50"
-              }`}
-            >{v}</button>
-          ))}
-          <div className="ml-auto flex gap-1">
-            <button onClick={() => setView("schedule")}
-              className={`px-3 py-1.5 text-xs rounded-lg ${view === "schedule" ? "bg-primary-50 text-primary-600" : "text-sage-500"}`}>Weekly Schedule</button>
-            <button onClick={() => setView("week")}
-              className={`px-3 py-1.5 text-xs rounded-lg ${view === "week" ? "bg-primary-50 text-primary-600" : "text-sage-500"}`}>Calendar View</button>
-          </div>
-        </div>
+
+          {/* Day Selector for Daily View */}
+          {view === "day" && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-sage-500">Day:</span>
+              {daysOfWeek.filter(d => !excludeWeekends || d !== "saturday" && d !== "sunday").map(d => (
+                <button key={d} onClick={() => setSelectedDay(d)}
+                  className={`px-3 py-1.5 text-xs rounded-lg ${selectedDay === d ? "bg-primary-500 text-white" : "bg-white border border-sage-200 text-sage-700"}`}>{dayLabels[d].substring(0,3)}</button>
+              ))}
+            </div>
+          )}
 
         {view === "schedule" ? (
           <>
@@ -252,13 +276,17 @@ export default function AdminCalendar() {
               </div>
             )}
 
-            {/* Weekly Schedule Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-7 gap-3">
-              {daysOfWeek.map((day) => {
-                const daySch = currentSchedule.weekSchedule[day];
-                return (
-                  <div key={day} className={`bg-white rounded-2xl border overflow-hidden ${
-                    editingDay === day ? 'ring-2 ring-primary-400 border-primary-300' : 'border-sage-100'
+            {/* Schedule Grid */}
+            <div className={`grid grid-cols-1 gap-3 ${view === "day" ? "" : excludeWeekends ? "lg:grid-cols-5" : "lg:grid-cols-7"}`}>
+              {(view === "day" ? [selectedDay] : daysOfWeek.filter(d => !excludeWeekends || (d !== "saturday" && d !== "sunday"))).flatMap((day) => {
+                const showVets = selectedVet === "all" ? vets : [selectedVet];
+                return showVets.map(vetName => {
+                  const vetSchedule = schedules.find(s => s.vetName === vetName)!;
+                  const daySch = vetSchedule?.weekSchedule[day];
+                  if (!daySch) return [];
+                  return (
+                  <div key={day + vetName} className={`bg-white rounded-2xl border overflow-hidden ${
+                    editingDay === day && selectedVet !== "all" ? 'ring-2 ring-primary-400 border-primary-300' : 'border-sage-100'
                   }`}>
                     <div className={`px-3 py-2 text-center ${daySch.enabled ? 'bg-primary-50' : 'bg-sage-50'}`}>
                       <p className="text-xs font-semibold text-sage-900">{dayLabels[day]}</p>

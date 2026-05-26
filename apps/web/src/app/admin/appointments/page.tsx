@@ -23,12 +23,26 @@ const statusStyles: Record<string, string> = {
 
 export default function AdminAppointments() {
   const [filter, setFilter] = useState("All");
+  const [dateFilter, setDateFilter] = useState("all");
+  const [dateSearch, setDateSearch] = useState("");
+  const [dateRangeFrom, setDateRangeFrom] = useState("");
+  const [dateRangeTo, setDateRangeTo] = useState("");
   const [appts, setAppts] = useState(initialAppointments);
   const [rescheduling, setRescheduling] = useState<number | null>(null);
   const [newDate, setNewDate] = useState("");
   const [newTime, setNewTime] = useState("");
 
-  const filtered = filter === "All" ? appts : appts.filter(a => a.status === filter);
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  const filtered = appts.filter(a => {
+    if (filter !== "All" && a.status !== filter) return false;
+    if (dateFilter === "today" && a.date !== todayStr) return false;
+    if (dateFilter === "range" && dateRangeFrom && dateRangeTo) {
+      if (a.date < dateRangeFrom || a.date > dateRangeTo) return false;
+    }
+    if (dateFilter === "single" && dateSearch && a.date !== dateSearch) return false;
+    return true;
+  });
 
   const handleReschedule = (id: number) => {
     setRescheduling(id);
@@ -53,20 +67,47 @@ export default function AdminAppointments() {
       </div>
 
       <div className="p-8">
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-2 mb-6">
-          <span className="text-sm text-sage-500 flex items-center gap-1"><Filter className="w-3 h-3" /> Status:</span>
-          {["All", "Pending", "Confirmed", "Checked In", "Completed", "Cancelled"].map((s) => (
-            <button key={s} onClick={() => setFilter(s)}
-              className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                filter === s ? "bg-primary-500 text-white" : "bg-sage-100 text-sage-600 hover:bg-sage-200"
-              }`}
-            >{s}</button>
-          ))}
-          <div className="ml-auto flex items-center gap-2">
-            <span className="text-xs text-sage-400"><Calendar className="w-3 h-3 inline" /> May 20, 2025</span>
-          </div>
-        </div>
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-2 mb-3">
+        <span className="text-sm text-sage-500 flex items-center gap-1"><Filter className="w-3 h-3" /> Status:</span>
+        {["All", "Pending", "Confirmed", "Checked In", "Completed", "Cancelled"].map((s) => (
+          <button key={s} onClick={() => setFilter(s)}
+            className={`px-3 py-1 text-xs rounded-full transition-colors ${
+              filter === s ? "bg-primary-500 text-white" : "bg-sage-100 text-sage-600 hover:bg-sage-200"
+            }`}
+          >{s}</button>
+        ))}
+      </div>
+
+      {/* Date Filter */}
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        <span className="text-sm text-sage-500"><Calendar className="w-3.5 h-3.5 inline" /> Date:</span>
+        <button onClick={() => setDateFilter("all")}
+          className={`px-3 py-1 text-xs rounded-full ${dateFilter === "all" ? "bg-primary-500 text-white" : "bg-sage-100 text-sage-600 hover:bg-sage-200"}`}>All</button>
+        <button onClick={() => setDateFilter("today")}
+          className={`px-3 py-1 text-xs rounded-full ${dateFilter === "today" ? "bg-primary-500 text-white" : "bg-sage-100 text-sage-600 hover:bg-sage-200"}`}>Today</button>
+        <button onClick={() => setDateFilter("single")}
+          className={`px-3 py-1 text-xs rounded-full ${dateFilter === "single" ? "bg-primary-500 text-white" : "bg-sage-100 text-sage-600 hover:bg-sage-200"}`}>Single Date</button>
+        <button onClick={() => setDateFilter("range")}
+          className={`px-3 py-1 text-xs rounded-full ${dateFilter === "range" ? "bg-primary-500 text-white" : "bg-sage-100 text-sage-600 hover:bg-sage-200"}`}>Date Range</button>
+
+        {dateFilter === "single" && (
+          <input type="date" value={dateSearch} onChange={e => setDateSearch(e.target.value)}
+            className="px-3 py-1 border border-sage-200 rounded-lg text-xs" />
+        )}
+        {dateFilter === "range" && (
+          <>
+            <input type="date" value={dateRangeFrom} onChange={e => setDateRangeFrom(e.target.value)}
+              className="px-3 py-1 border border-sage-200 rounded-lg text-xs" />
+            <span className="text-xs text-sage-400">to</span>
+            <input type="date" value={dateRangeTo} onChange={e => setDateRangeTo(e.target.value)}
+              className="px-3 py-1 border border-sage-200 rounded-lg text-xs" />
+          </>
+        )}
+        {dateFilter !== "all" && (
+          <span className="text-xs text-sage-400">({filtered.length} appointments)</span>
+        )}
+      </div>
 
         {/* Table */}
         <div className="bg-white rounded-2xl border border-sage-100 overflow-hidden">
